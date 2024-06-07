@@ -1,5 +1,5 @@
 ARG GEONODE_IMAGE_VERSION
-FROM zalf/geonode:${GEONODE_IMAGE_VERSION}
+FROM zalf/geonode-base:${GEONODE_IMAGE_VERSION}
 
 # geonode-project installs ldap per default
 # there the locale is set explicitly
@@ -9,10 +9,16 @@ RUN sed -i -e 's/# C.UTF-8 UTF-8/C.UTF-8 UTF-8/' /etc/locale.gen && \
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-COPY ./geonode-mapstore-client /usr/src/django_geonode_mapstore_client_dev
+# import geonode-mapstore-client into image
+COPY docker/geonode/geonode-mapstore-client /usr/src/django_geonode_mapstore_client_dev
 RUN yes w | pip install -e /usr/src/django_geonode_mapstore_client_dev
 
-COPY ./requirements.txt /usr/src/more_requirements.txt
+# import apps
+COPY ./geonode/apps/externalapplications/externalapplications/ /usr/src/geonode/externalapplications
+
+# import additional requirements into image
+COPY docker/geonode/requirements.txt /usr/src/more_requirements.txt
 RUN yes w | pip install --src /usr/src -r /usr/src/more_requirements.txt
+
 
 RUN rm .env*

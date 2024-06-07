@@ -1,3 +1,14 @@
-[submodule "geonode/externalapplications"]
+[submodule "geonode/apps/externalapplications"]
 	path = geonode/apps/externalapplications
-	url = https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications.git
+	url = https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications
+	branch = main
+  
+[submodule "geonode/apps/geonode-mapstore-client"]
+	path = geonode/apps/geonode-mapstore-client
+	url = https://github.com/zalf-rdm/geonode-mapstore-client.git
+	branch = release-4.2.0
+
+[submodule "geonode/apps/geonode-agrovoc-importer"]
+	path = geonode/apps/geonode-agrovoc-importer
+	url = https://github.com/zalf-rdm/geonode-agrovoc-importer.git
+  branch = v0.1.0
