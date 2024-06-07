@@ -10,11 +10,19 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 # import geonode-mapstore-client into image
-COPY docker/geonode/geonode-mapstore-client /usr/src/django_geonode_mapstore_client_dev
+COPY docker/geonode/geonode-mapstore-client /usr/src/django_geonode_mapstore_client_blueprint
 RUN yes w | pip install -e /usr/src/django_geonode_mapstore_client_dev
 
-# import apps
+# copy external applications
 COPY ./geonode/apps/externalapplications/externalapplications/ /usr/src/geonode/externalapplications
+
+# copy agrovoc importer scripts
+COPY ./geonode/apps/geonode-agrovoc-importer/load_agrovoc_thesaurus.py /usr/src/geonode/geonode/base/management/commands/
+COPY ./geonode/apps/geonode-agrovoc-importer/load_gemet_thesaurus.py /usr/src/geonode/geonode/base/management/commands/
+
+COPY ./geonode/apps/importer-datapackage /usr/src/geonode/importer-datapackage
+WORKDIR /usr/src/geonode/importer-datapackage
+RUN python setup.py install
 
 # import additional requirements into image
 COPY docker/geonode/requirements.txt /usr/src/more_requirements.txt
