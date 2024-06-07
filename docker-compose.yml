@@ -14,11 +14,12 @@ x-common-django:
     - .env
   volumes:
     # configuration
-    - ./geonode/geonode/settings_override.py:/usr/src/geonode/geonode/settings_override.py
-    - ./geonode/fixtures:/usr/src/geonode/fixtures
+    # - ./geonode/fixtures:/usr/src/geonode/fixtures
     # contrib apps
-    - ./geonode/apps/customizations:/usr/src/geonode/customizations
-    - ./geonode/apps/externalapplications/externalapplications:/usr/src/geonode/externalapplications
+    # - ./geonode/apps/customizations:/usr/src/geonode/customizations
+    # - ./geonode/apps/externalapplications/externalapplications:/usr/src/geonode/externalapplications
+    # - ./geonode/apps/externalapplications/externalapplications:/usr/src/geonode/externalapplications
+
     # volumes
     - statics:/mnt/volumes/statics
     - geoserver-data-dir:/geoserver_data/data

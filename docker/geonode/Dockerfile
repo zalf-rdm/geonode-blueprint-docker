@@ -1,5 +1,5 @@
 ARG GEONODE_IMAGE_VERSION
-FROM zalf/geonode:${GEONODE_IMAGE_VERSION}
+FROM zalf/geonode-base:${GEONODE_IMAGE_VERSION}
 
 # geonode-project installs ldap per default
 # there the locale is set explicitly
@@ -9,10 +9,27 @@ RUN sed -i -e 's/# C.UTF-8 UTF-8/C.UTF-8 UTF-8/' /etc/locale.gen && \
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-COPY ./geonode-mapstore-client /usr/src/django_geonode_mapstore_client_dev
-RUN yes w | pip install -e /usr/src/django_geonode_mapstore_client_dev
+ARG TEMP_CODE_LOCATION=/tmp/docker-blueprint
+ARG PIP_SRC_PATH=/usr/src
 
-COPY ./requirements.txt /usr/src/more_requirements.txt
-RUN yes w | pip install --src /usr/src -r /usr/src/more_requirements.txt
+# import geonode-mapstore-client into image
+COPY ./geonode/apps/geonode-mapstore-client $TEMP_CODE_LOCATION/django_geonode_mapstore_client
+RUN yes w | pip install -e$TEMP_CODE_LOCATION/django_geonode_mapstore_client
+
+# copy external applications
+# COPY ./geonode/apps/externalapplications/externalapplications/ /usr/src/geonode/externalapplications
+
+# copy agrovoc importer scripts
+COPY ./geonode/apps/geonode-agrovoc-importer/load_agrovoc_thesaurus.py /usr/src/geonode/geonode/base/management/commands/
+COPY ./geonode/apps/geonode-agrovoc-importer/load_gemet_thesaurus.py /usr/src/geonode/geonode/base/management/commands/
+
+COPY ./geonode/apps/importer-datapackage $TEMP_CODE_LOCATION/importer-datapackage
+RUN yes w | pip install -e $TEMP_CODE_LOCATION/importer-datapackage
+
+# import additional requirements into image
+COPY docker/geonode/requirements.txt $TEMP_CODE_LOCATION/requirements.txt
+RUN yes w | pip install -e -r $TEMP_CODE_LOCATION/requirements.txt
+
+RUN rm -rf $TEMP_CODE_LOCATION
 
 RUN rm .env*
