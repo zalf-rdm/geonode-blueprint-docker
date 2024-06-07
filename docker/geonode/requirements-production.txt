@@ -1,0 +1,4 @@
+# additional_requirements
+git+https://github.com/zalf-rdm/geonode-mapstore-client.git@release-4.2.0#egg=django-geonode-mapstore-client
+git+https://github.com/GeoNodeUserGroup-DE/importer-datapackage.git@main#egg=importer_datapackage
+git+https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications.git@main#egg=externalapplications
