@@ -11,9 +11,9 @@ branch = release-4.2.0
 [submodule "geonode-agrovoc-importer"]
 path = geonode/apps/geonode-agrovoc-importer
 url = https://github.com/GeoNodeUserGroup-DE/geonode-agrovoc-importer.git
-branch = v0.1.0
+branch = main
 
 [submodule "geonode/apps/importer-datapackage"]
-	path = geonode/apps/importer-datapackage
-	url = https://github.com/GeoNodeUserGroup-DE/importer-datapackage.git
-  branch = main
+path = geonode/apps/importer-datapackage
+url = https://github.com/GeoNodeUserGroup-DE/importer-datapackage.git
+branch = main
