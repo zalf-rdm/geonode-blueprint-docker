@@ -1,0 +1,33 @@
+# example configuration yaml for geonode blueprint configuration, need to be discussed
+
+geonode:
+  git:
+    url: git+https://github.com/zalf-rdm/geonode.git
+    branch: release-0
+  # docker:
+  #   image: zalf/geonode
+  #   tag: 4.2.2
+  # local:
+  #   path: /home/mwall/Sourcecode/geonode
+
+# geoserver:
+#   docker:
+#     image: geonode/geoserver
+#     tag: 2.23.3-v2
+---
+# apps need to be from git, ether to build as submodule in dev mode or as pip install in requirements.txt
+apps:
+  - name: django-geonode-mapstore-client
+    git:
+      url: git+https://github.com/Thuenen-GeoNode-Development/geonode-mapstore-client
+      branch: thuenen_4.2.x
+
+  - name: importer_datapackage
+    git:
+      url: git+https://github.com/GeoNodeUserGroup-DE/importer-datapackage.git
+      branch: main
+
+  - name: externalapplications
+    git:
+      url: git+https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications.git
+      branch: main
