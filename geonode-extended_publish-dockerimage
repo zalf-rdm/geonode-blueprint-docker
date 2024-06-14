@@ -1,0 +1,69 @@
+
+pipeline {
+    environment {
+        TOKEN = credentials('github-access-token')
+        DOCKERHUB_CREDENTIALS = 'hub.docker.com'
+
+        IMAGE_NAME = 'zalf/geonode'
+        GEONODE_RELEASE = "${params.GEONODE_RELEASE}"
+        ZALF_GEONODE_RELEASE = "${params.ZALF_GEONODE_RELEASE}"
+        IMAGE_TAG = "$GEONODE_RELEASE-$ZALF_GEONODE_RELEASE.$BUILD_NUMBER"
+        BRANCH = "${params.GEONODE_BUILD_BRANCH}"
+    }
+
+    agent any
+
+    stages {
+        stage('Building image') {
+            steps{
+                script {
+                    dockerImage = docker.build("$IMAGE_NAME:$IMAGE_TAG", "--no-cache --build-arg GEONODE_IMAGE_VERSION=$GEONODE_RELEASE --build-arg TOKEN=$TOKEN_PSW -f docker/geonode/Dockerfile.production .")
+                }
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS ) {
+                        dockerImage.push("$IMAGE_TAG")
+                        dockerImage.push("$GEONODE_RELEASE")
+                        dockerImage.push("$ZALF_GEONODE_RELEASE.$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+
+        stage('Remove Unused docker image') {
+            steps {
+                sh "docker rmi $IMAGE_NAME:$IMAGE_TAG"
+                sh "docker rmi $IMAGE_NAME:$GEONODE_RELEASE"
+                sh "docker rmi $IMAGE_NAME:$ZALF_GEONODE_RELEASE.$BUILD_NUMBER"
+                sh "docker rmi $IMAGE_NAME:latest"
+            }
+        }
+    }
+
+    post {
+        success {
+            slackSend color: 'good', message: "Build ${env.JOB_NAME} ${env.BUILD_NUMBER} success (<${env.BUILD_URL}|Open Jenkins>)"
+        }
+        failure {
+            slackSend color: 'danger', message: "Build ${env.JOB_NAME} ${env.BUILD_NUMBER} failed (<${env.BUILD_URL}|Open Jenkins>)"
+        }
+        always {
+            cleanWs(cleanWhenNotBuilt: true,
+                    cleanWhenAborted: true,
+                    cleanWhenFailure: true,
+                    cleanWhenSuccess: true,
+                    cleanWhenUnstable: true,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
+        }
+    }
+}
+
