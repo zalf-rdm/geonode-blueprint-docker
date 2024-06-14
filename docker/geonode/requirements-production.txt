@@ -2,4 +2,4 @@
 -e git+https://github.com/Thuenen-GeoNode-Development/geonode-mapstore-client@thuenen_4.2.x#egg=django-geonode-mapstore-client
 #-e git+https://github.com/zalf-rdm/geonode-mapstore-client.git@release-4.2.0#egg=django-geonode-mapstore-client
 -e git+https://github.com/GeoNodeUserGroup-DE/importer-datapackage.git@main#egg=importer_datapackage
--e git+https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications.git@main#egg=externalapplications
+-e git+https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications.git@v1.0.0#egg=externalapplications
