@@ -1,7 +1,7 @@
 [submodule "externalapplications"]
 path = geonode/apps/externalapplications
 url = https://github.com/GeoNodeUserGroup-DE/contrib_externalapplications.git
-branch = main
+branch = v1.0.1
 
 [submodule "geonode-mapstore-client"]
 path = geonode/apps/geonode-mapstore-client
